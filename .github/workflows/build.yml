@@ -1,0 +1,43 @@
+name: Build addon
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Dar permisos al wrapper
+        run: |
+          if [ ! -f gradlew ]; then
+            echo "No existe gradlew, generando wrapper..."
+          fi
+          chmod +x gradlew || true
+
+      - name: Generar wrapper si falta
+        run: |
+          if [ ! -f gradlew ]; then
+            sudo apt-get update && sudo apt-get install -y gradle
+            gradle wrapper --gradle-version 8.10
+            chmod +x gradlew
+          fi
+
+      - name: Compilar
+        run: ./gradlew build --stacktrace
+
+      - name: Subir el jar como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: pvp-addon-jar
+          path: build/libs/*.jar
