@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "pvp-addon",
+  "version": "${version}",
+  "name": "PvP Addon",
+  "description": "Addon de PvP para Meteor Client",
+  "authors": ["Tu Nombre"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "meteor": [
+      "com.example.pvpaddon.PvpAddon"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.1",
+    "meteor-client": "*"
+  }
+}
